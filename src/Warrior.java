@@ -1,6 +1,6 @@
 public class Warrior extends Player implements Ability{
     public Warrior(String Name){
-        super(Name, 300, 50, 20, 40, 0);
+        super(Name, 350, 30, 20, 40, 0);
     }
 
     @Override

@@ -1,12 +1,11 @@
 public class Mage extends Player implements Ability{
     public Mage(String Name){
-        super(Name, 250, 40, 20, 60 ,0);
+        super(Name, 200, 40, 20, 60 ,0);
     }
 
     @Override
     public void useAttackAbility(Player target){
         System.out.println(getName() + " casts a poweful fireball towards " + target.getName());
-
             target.takeDamage(getPower(), target, this);
             target.setTickDamage(target.getTickDamage()+8);
 
