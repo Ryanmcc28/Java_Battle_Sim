@@ -1,4 +1,5 @@
 import java.sql.SQLOutput;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
@@ -8,6 +9,7 @@ public class Main {
     String name = "";
     Player player;
     Player opponent;
+    String difficulty = "";
 
     public static void main(String[] args) {
         Main main = new Main();
@@ -79,7 +81,51 @@ public class Main {
         System.out.println();
         pause(1000);
 
-        gameLoop(player,opponent);
+        gameLoop(player,opponent, "local");
+    }
+
+    private void AIMode(){
+        System.out.println();
+        System.out.println("Player 1, select your class:");
+        System.out.println("Warrior! - Has High health and damage but no quirks");
+        System.out.println("Mage! - Low health, but high damage and awesome abilities");
+        System.out.println("Archer! - High speed with evasive abilities but low damage");
+        System.out.println();
+        System.out.print("Chosen Class: ");
+        type = scanner.next();
+        System.out.print("Enter your champions name: ");
+        name = scanner.next();
+
+        switch (type.toLowerCase()){
+            case "warrior":
+                player = new Warrior(name);
+                break;
+            case "mage":
+                player = new Mage(name);
+                break;
+            case "archer":
+                player = new Archer(name);
+                break;
+        }
+        System.out.println();
+        System.out.print("Select AI difficulty (Easy/Hard) :");
+        difficulty = scanner.next();
+        System.out.println();
+        opponent = findPick(player, difficulty);
+
+        System.out.println("Starting Game......");
+        pause(1000);
+        System.out.println();
+        System.out.println("Player one is " + player.getName() + " the " + player.getClass().getSimpleName() + "!!!");
+        pause(1500);
+        System.out.println("Player two is " + opponent.getName() + " the " + opponent.getClass().getSimpleName()+ "!!!");
+        pause(1500);
+        System.out.println("FIGHT!!!!");
+        System.out.println();
+        pause(1000);
+
+        gameLoop(player,opponent,"AI");
+
     }
 
 
@@ -88,25 +134,32 @@ public class Main {
     String ability2 = "";
     boolean turn = false;
 
-    private void gameLoop(Player player1, Player player2){
+    private void gameLoop(Player player1, Player player2, String mode){
         turn = true;
+        if(!mode.equals("local")){
+            while (true) {
+                if(player1.getSpeed() > player2.getSpeed()){
+                    player1Turn(ability1, player1,player2);
+                    player2TurnAI(ability2,player1,player2);
+                }else {
+                    player2TurnAI(ability2,player1,player2);
+                    player1Turn(ability1, player1,player2);
+                }
+            }
+        }else{
+            while (true) {
 
-        while (true) {
-
-            if(player1.getSpeed() > player2.getSpeed()){
-                player1Turn(ability1, player1,player2);
-                player2Turn(ability2,player1,player2);
-            }else {
-                player2Turn(ability2,player1,player2);
-                player1Turn(ability1, player1,player2);
+                if(player1.getSpeed() > player2.getSpeed()){
+                    player1Turn(ability1, player1,player2);
+                    player2Turn(ability2,player1,player2);
+                }else {
+                    player2Turn(ability2,player1,player2);
+                    player1Turn(ability1, player1,player2);
+                }
             }
         }
     }
 
-
-    private void AIMode(){
-
-    }
     private void pause(int milliseconds){
         try {
             Thread.sleep(milliseconds);
@@ -133,6 +186,8 @@ public class Main {
                 turn = false;
                 break;
         }
+        pause(1000);
+        System.out.println();
         if(player2.getHealth() <= 0){
             player1.won();
         }
@@ -161,8 +216,56 @@ public class Main {
                 System.out.println();
                 player2Turn(ability, player1,player2);
         }
+        pause(1000);
+        System.out.println();
         if(player1.getHealth() <= 0){
             player2.won();
         }
+    }
+
+    private void player2TurnAI(String ability, Player player1, Player player2){
+        Random random = new Random();
+        int turn = random.nextInt(0,2);
+        switch (turn) {
+            case 0:
+                player2.useAttackAbility(player1);
+                break;
+            case 1:
+                player2.useDefenceAbility();
+                break;
+            default:
+                System.out.println();
+                player2.printStats();
+                System.out.println();
+                player2Turn(ability, player1,player2);
+        }
+        pause(1000);
+        System.out.println();
+        if(player1.getHealth() <= 0){
+            player2.won();
+        }
+    }
+
+    private Player findPick(Player player, String difficulty){
+        if (difficulty.toLowerCase().equals("easy")){
+            switch (player.getClass().getSimpleName()){
+                case "Warrior":
+                    return new Archer("Danny");
+                case "Mage":
+                    return new Warrior("Danny");
+                case "Archer":
+                    return new Mage("Danny");
+            }
+        }else{
+            switch (player.getClass().getSimpleName()){
+                case "Warrior":
+                    return new Mage("Danny");
+                case "Mage":
+                    return new Archer("Danny");
+                case "Archer":
+                    return new Warrior("Danny");
+            }
+        }
+        return new Mage("ERROR");
     }
 }
