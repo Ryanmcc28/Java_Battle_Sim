@@ -1,6 +1,6 @@
 public class Archer extends Player implements Ability{
     public Archer(String Name){
-        super(Name, 200, 50, 40, 70, 0);
+        super(Name, 200, 70, 40, 70, 0);
     }
     private boolean deflect = false;
 

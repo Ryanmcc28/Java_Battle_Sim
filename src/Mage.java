@@ -7,7 +7,7 @@ public class Mage extends Player implements Ability{
     public void useAttackAbility(Player target){
         System.out.println(getName() + " casts a poweful fireball towards " + target.getName());
             target.takeDamage(getPower(), target, this);
-            target.setTickDamage(target.getTickDamage()+8);
+            target.setTickDamage(target.getTickDamage()+6);
 
 
         this.applyTickDamage();

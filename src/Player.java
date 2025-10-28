@@ -84,8 +84,7 @@ public abstract class Player implements Ability{
     public void setTickDamage(int tickDamage){this.tickDamage = tickDamage;}
 
     public boolean isAlive(){
-        if(this.health <= 0){return false;}
-        else return true;
+        return this.health > 0;
     }
 
     public void printStats() {
