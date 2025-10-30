@@ -31,6 +31,9 @@ public abstract class Player implements Ability{
                 System.out.println("Attack Deflected!!!!!");
                 System.out.println("Direct hit!!! " + attacker.name + " lost " + damage + " health");
                 attacker.setHealth(attacker.health -= damage);
+                if(attacker.getClass().getSimpleName().equals("Mage")){
+                    attacker.setTickDamage(attacker.getTickDamage()+6);
+                }
             }else {
                 System.out.println("Direct hit!!! " + target.name + " lost " + damage + " health");
                 target.health -= (damage);
